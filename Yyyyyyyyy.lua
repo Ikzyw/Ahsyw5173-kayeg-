@@ -392,8 +392,10 @@ function Library.CreateWindow(title,subtitle,size,version)
 	self.TextLabel_2.BackgroundTransparency = 1.000
 	self.TextLabel_2.BorderColor3 = Color3.fromRGB(59, 59, 59)
 	self.TextLabel_2.BorderSizePixel = 0
-	self.TextLabel_2.Position = UDim2.new(0, trueposition, 0.05, -1)
-	self.TextLabel_2.Size = UDim2.new(0, subtitlesize, 0, 40)
+	task.wait() -- biar size kebaca dulu
+    self.TextLabel_2.Position = UDim2.new(0, self.TextLabel.AbsoluteSize.X + 10, 0, 0)
+	self.TextLabel_2.AutomaticSize = Enum.AutomaticSize.X
+    self.TextLabel_2.Size = UDim2.new(0,0,0,40)
 	self.TextLabel_2.Font = Enum.Font.Gotham
 	self.TextLabel_2.Text = subtitle
 	self.TextLabel_2.TextColor3 = self.Theme.SubTtitleTextColor
@@ -410,7 +412,8 @@ function Library.CreateWindow(title,subtitle,size,version)
 		self.version.BackgroundTransparency = self.Theme.versionBackgroundTransparency
 		self.version.BorderColor3 = Color3.fromRGB(0, 0, 0)
 		self.version.BorderSizePixel = 0
-		self.version.Position = UDim2.new(0, trueposition + subtitlesize - 2, 0.20, 0)
+		self.version.AnchorPoint = Vector2.new(1, 0)
+        self.version.Position = UDim2.new(1, -10, 0.2, 0)
 		self.version.Size = UDim2.new(0, 55, 0, 24)
 		self.version.Parent = self.Header
 

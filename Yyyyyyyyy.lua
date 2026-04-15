@@ -1,4 +1,4 @@
--- LPH FROM TEMU
+-- Cursedsaken ui added slider + input different font
 
 local cloneref = (cloneref or clonereference or function(instance) return instance end)
 
@@ -1199,6 +1199,116 @@ function Library:AddTab(name : string,icon : string)
 		end)
 	end
 
+	function tab:AddInput(config)
+    local input = {
+        Name = config.Name or "Input",
+        Placeholder = config.Placeholder or "Type here...",
+        Default = config.Default or "",
+        Callback = config.Callback or function() end
+    }
+
+    local Frame = Instance.new("Frame")
+    local Title = Instance.new("TextLabel")
+    local Box = Instance.new("TextBox")
+    local UICorner = Instance.new("UICorner")
+
+    Frame.Parent = self.Container
+    Frame.Size = UDim2.new(0, 360, 0, 50)
+    Frame.BackgroundColor3 = Color3.fromRGB(225,225,225)
+    Frame.BackgroundTransparency = self.Theme.BackGroundElemTran
+
+    UICorner.CornerRadius = UDim.new(0,12)
+    UICorner.Parent = Frame
+
+    -- TITLE
+    Title.Parent = Frame
+    Title.BackgroundTransparency = 1
+    Title.Position = UDim2.new(0.03,0,0,5)
+    Title.Size = UDim2.new(0,200,0,20)
+    Title.Font = Enum.Font.GothamBold
+    Title.Text = input.Name
+    Title.TextColor3 = self.Theme.TabTextColor
+    Title.TextSize = 15
+    Title.TextXAlignment = Enum.TextXAlignment.Left
+
+    -- TEXTBOX
+    Box.Parent = Frame
+    Box.BackgroundTransparency = 0.9
+    Box.Position = UDim2.new(0.03,0,1,-25)
+    Box.Size = UDim2.new(0.94,0,0,20)
+    Box.Font = Enum.Font.Gotham
+    Box.Text = input.Default
+    Box.PlaceholderText = input.Placeholder
+    Box.TextColor3 = self.Theme.TextColor
+    Box.TextSize = 14
+    Box.TextXAlignment = Enum.TextXAlignment.Left
+
+    -- CALLBACK
+    Box.FocusLost:Connect(function()
+        input.Callback(Box.Text)
+    end)
+
+    return {
+        Set = function(v)
+            Box.Text = v
+        end
+    }
+	end
+
+	function tab:AddKeybind(config)
+    local key = config.Default or Enum.KeyCode.E
+    local listening = false
+
+    local Frame = Instance.new("Frame")
+    local Title = Instance.new("TextLabel")
+    local Button = Instance.new("TextButton")
+    local UICorner = Instance.new("UICorner")
+
+    Frame.Parent = self.Container
+    Frame.Size = UDim2.new(0, 360, 0, 45)
+    Frame.BackgroundColor3 = Color3.fromRGB(225,225,225)
+    Frame.BackgroundTransparency = self.Theme.BackGroundElemTran
+
+    UICorner.CornerRadius = UDim.new(0,12)
+    UICorner.Parent = Frame
+
+    Title.Parent = Frame
+    Title.BackgroundTransparency = 1
+    Title.Position = UDim2.new(0.03,0,0,10)
+    Title.Size = UDim2.new(0,200,0,20)
+    Title.Font = Enum.Font.GothamBold
+    Title.Text = config.Name or "Keybind"
+    Title.TextColor3 = self.Theme.TabTextColor
+    Title.TextSize = 15
+    Title.TextXAlignment = Enum.TextXAlignment.Left
+
+    Button.Parent = Frame
+    Button.Size = UDim2.new(0,80,0,25)
+    Button.Position = UDim2.new(1,-90,0.5,-12)
+    Button.Text = key.Name
+    Button.Font = Enum.Font.GothamBold
+    Button.TextSize = 14
+
+    Button.MouseButton1Click:Connect(function()
+        listening = true
+        Button.Text = "..."
+    end)
+
+    game:GetService("UserInputService").InputBegan:Connect(function(input)
+        if listening and input.UserInputType == Enum.UserInputType.Keyboard then
+            key = input.KeyCode
+            Button.Text = key.Name
+            listening = false
+        end
+
+        if input.KeyCode == key then
+            if config.Callback then
+                config.Callback()
+            end
+        end
+    end)
+	end
+	
 	function tab:AddParagraph(title, subtitle)
 		local TextService = game:GetService("TextService")
 

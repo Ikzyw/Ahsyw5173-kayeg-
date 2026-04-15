@@ -1,4 +1,4 @@
--- Cursedsaken ui added slider + input different font
+-- Cursedsaken ui added slider + input different font and ofc has bugs don't expect it to be perfect nga
 
 local cloneref = (cloneref or clonereference or function(instance) return instance end)
 
@@ -405,32 +405,6 @@ function Library.CreateWindow(title,subtitle,size,version)
 
 	if version then
 		self.version = Instance.new("Frame")
-		self.versionUICorner = Instance.new("UICorner")
-		self.versionTextLabel = Instance.new("TextLabel")
-
-		self.version.BackgroundColor3 = self.Theme.versionBackgroundColor3
-		self.version.BackgroundTransparency = self.Theme.versionBackgroundTransparency
-		self.version.BorderColor3 = Color3.fromRGB(0, 0, 0)
-		self.version.BorderSizePixel = 0
-		self.version.AnchorPoint = Vector2.new(1, 0)
-        self.version.Position = UDim2.new(1, -10, 0.2, 0)
-		self.version.Size = UDim2.new(0, 55, 0, 24)
-		self.version.Parent = self.Header
-
-		self.versionUICorner.CornerRadius = UDim.new(0, 11)
-		self.versionUICorner.Parent = self.version
-
-		self.versionTextLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-		self.versionTextLabel.BackgroundTransparency = 1.000
-		self.versionTextLabel.BorderColor3 = Color3.fromRGB(0, 0, 0)
-		self.versionTextLabel.BorderSizePixel = 0
-		self.versionTextLabel.Position = UDim2.new(0.08, 0, 0.11, 0)
-		self.versionTextLabel.Size = UDim2.new(0, 45, 0, 18)
-		self.versionTextLabel.Font = Enum.Font.SciFi
-		self.versionTextLabel.Text = version
-		self.versionTextLabel.TextColor3 = self.Theme.versionTextColor
-		self.versionTextLabel.TextSize = 14.000
-		self.versionTextLabel.Parent = self.version
 	end
 
 	self.Frame = Instance.new("Frame")
@@ -1255,59 +1229,7 @@ function Library:AddTab(name : string,icon : string)
     }
 	end
 
-	function tab:AddKeybind(config)
-    local key = config.Default or Enum.KeyCode.E
-    local listening = false
-
-    local Frame = Instance.new("Frame")
-    local Title = Instance.new("TextLabel")
-    local Button = Instance.new("TextButton")
-    local UICorner = Instance.new("UICorner")
-
-    Frame.Parent = self.Container
-    Frame.Size = UDim2.new(0, 360, 0, 45)
-    Frame.BackgroundColor3 = Color3.fromRGB(225,225,225)
-    Frame.BackgroundTransparency = self.Theme.BackGroundElemTran
-
-    UICorner.CornerRadius = UDim.new(0,12)
-    UICorner.Parent = Frame
-
-    Title.Parent = Frame
-    Title.BackgroundTransparency = 1
-    Title.Position = UDim2.new(0.03,0,0,10)
-    Title.Size = UDim2.new(0,200,0,20)
-    Title.Font = Enum.Font.GothamBold
-    Title.Text = config.Name or "Keybind"
-    Title.TextColor3 = self.Theme.TabTextColor
-    Title.TextSize = 15
-    Title.TextXAlignment = Enum.TextXAlignment.Left
-
-    Button.Parent = Frame
-    Button.Size = UDim2.new(0,80,0,25)
-    Button.Position = UDim2.new(1,-90,0.5,-12)
-    Button.Text = key.Name
-    Button.Font = Enum.Font.GothamBold
-    Button.TextSize = 14
-
-    Button.MouseButton1Click:Connect(function()
-        listening = true
-        Button.Text = "..."
-    end)
-
-    game:GetService("UserInputService").InputBegan:Connect(function(input)
-        if listening and input.UserInputType == Enum.UserInputType.Keyboard then
-            key = input.KeyCode
-            Button.Text = key.Name
-            listening = false
-        end
-
-        if input.KeyCode == key then
-            if config.Callback then
-                config.Callback()
-            end
-        end
-    end)
-	end
+	
 	
 	function tab:AddParagraph(title, subtitle)
 		local TextService = game:GetService("TextService")

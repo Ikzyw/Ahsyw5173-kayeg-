@@ -3933,9 +3933,6 @@ function Library:SetTheme(themeName : string)
 	self.Frame_2.BackgroundColor3 = theme.TextColor
 	self.Frame.BackgroundColor3 = theme.TextColor
 	self.WindowUser.BackgroundColor3 = theme.versionBackgroundColor3
-	self.version.BackgroundColor3 = theme.versionBackgroundColor3
-	self.version.BackgroundTransparency = theme.versionBackgroundTransparency
-	self.versionTextLabel.TextColor3 = theme.versionTextColor
 	self.Search.BackgroundColor3 =  theme.dbtncolor
 	self.Search.BackgroundTransparency =  theme.dbtntran
 	self.SearchTextBox2.TextColor3 = theme.TextColor

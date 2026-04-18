@@ -1,5 +1,3 @@
--- Cursedsaken ui added slider + input different font and ofc has bugs don't expect it to be perfect nga
-
 local cloneref = (cloneref or clonereference or function(instance) return instance end)
 
 local HttpService = cloneref(game:GetService("HttpService"))
@@ -392,10 +390,8 @@ function Library.CreateWindow(title,subtitle,size,version)
 	self.TextLabel_2.BackgroundTransparency = 1.000
 	self.TextLabel_2.BorderColor3 = Color3.fromRGB(59, 59, 59)
 	self.TextLabel_2.BorderSizePixel = 0
-	task.wait() -- biar size kebaca dulu
-    self.TextLabel_2.Position = UDim2.new(0, self.TextLabel.AbsoluteSize.X + 10, 0, 0)
-	self.TextLabel_2.AutomaticSize = Enum.AutomaticSize.X
-    self.TextLabel_2.Size = UDim2.new(0,0,0,40)
+	self.TextLabel_2.Position = UDim2.new(0, trueposition, 0.05, -1)
+	self.TextLabel_2.Size = UDim2.new(0, subtitlesize, 0, 40)
 	self.TextLabel_2.Font = Enum.Font.Gotham
 	self.TextLabel_2.Text = subtitle
 	self.TextLabel_2.TextColor3 = self.Theme.SubTtitleTextColor
@@ -1173,64 +1169,6 @@ function Library:AddTab(name : string,icon : string)
 		end)
 	end
 
-	function tab:AddInput(config)
-    local input = {
-        Name = config.Name or "Input",
-        Placeholder = config.Placeholder or "Type here...",
-        Default = config.Default or "",
-        Callback = config.Callback or function() end
-    }
-
-    local Frame = Instance.new("Frame")
-    local Title = Instance.new("TextLabel")
-    local Box = Instance.new("TextBox")
-    local UICorner = Instance.new("UICorner")
-
-    Frame.Parent = self.Container
-    Frame.Size = UDim2.new(0, 360, 0, 50)
-    Frame.BackgroundColor3 = Color3.fromRGB(225,225,225)
-    Frame.BackgroundTransparency = self.Theme.BackGroundElemTran
-
-    UICorner.CornerRadius = UDim.new(0,12)
-    UICorner.Parent = Frame
-
-    -- TITLE
-    Title.Parent = Frame
-    Title.BackgroundTransparency = 1
-    Title.Position = UDim2.new(0.03,0,0,5)
-    Title.Size = UDim2.new(0,200,0,20)
-    Title.Font = Enum.Font.GothamBold
-    Title.Text = input.Name
-    Title.TextColor3 = self.Theme.TabTextColor
-    Title.TextSize = 15
-    Title.TextXAlignment = Enum.TextXAlignment.Left
-
-    -- TEXTBOX
-    Box.Parent = Frame
-    Box.BackgroundTransparency = 0.9
-    Box.Position = UDim2.new(0.03,0,1,-25)
-    Box.Size = UDim2.new(0.94,0,0,20)
-    Box.Font = Enum.Font.Gotham
-    Box.Text = input.Default
-    Box.PlaceholderText = input.Placeholder
-    Box.TextColor3 = self.Theme.TextColor
-    Box.TextSize = 14
-    Box.TextXAlignment = Enum.TextXAlignment.Left
-
-    -- CALLBACK
-    Box.FocusLost:Connect(function()
-        input.Callback(Box.Text)
-    end)
-
-    return {
-        Set = function(v)
-            Box.Text = v
-        end
-    }
-	end
-
-	
-	
 	function tab:AddParagraph(title, subtitle)
 		local TextService = game:GetService("TextService")
 
@@ -2360,131 +2298,6 @@ function tab:AddBigBanner(config)
     }
 end
 
-function tab:AddSlider(config)
-    local slider = {
-        Name = config.Name or "Slider",
-        Min = config.Min or 0,
-        Max = config.Max or 100,
-        Default = config.Default or 0,
-        Callback = config.Callback or function() end
-    }
-
-    local Value = slider.Default
-    local dragging = false
-
-    local Slider = Instance.new("Frame")
-    local Title = Instance.new("TextLabel")
-    local ValueText = Instance.new("TextLabel")
-    local Bar = Instance.new("Frame")
-    local Fill = Instance.new("Frame")
-    local Circle = Instance.new("Frame")
-
-    Slider.Parent = self.Container
-    Slider.BackgroundColor3 = Color3.fromRGB(225,225,225)
-    Slider.BackgroundTransparency = self.Theme.BackGroundElemTran
-    Slider.Size = UDim2.new(0,360,0,50)
-
-    local UICorner = Instance.new("UICorner", Slider)
-    UICorner.CornerRadius = UDim.new(0,12)
-
-    -- TITLE
-    Title.Parent = Slider
-    Title.BackgroundTransparency = 1
-    Title.Position = UDim2.new(0.03,0,0,5)
-    Title.Size = UDim2.new(0,200,0,20)
-    Title.Font = Enum.Font.GothamBold
-    Title.Text = slider.Name
-    Title.TextColor3 = self.Theme.TabTextColor
-    Title.TextSize = 15
-    Title.TextXAlignment = Enum.TextXAlignment.Left
-
-    -- VALUE
-    ValueText.Parent = Slider
-    ValueText.BackgroundTransparency = 1
-    ValueText.Position = UDim2.new(1,-40,0,5)
-    ValueText.Size = UDim2.new(0,40,0,20)
-    ValueText.Font = Enum.Font.Gotham
-    ValueText.Text = tostring(Value)
-    ValueText.TextColor3 = self.Theme.TabSubTtitleTextColor
-    ValueText.TextSize = 14
-
-    -- BAR
-    Bar.Parent = Slider
-    Bar.Size = UDim2.new(0.94,0,0,6)
-    Bar.Position = UDim2.new(0.03,0,1,-15)
-    Bar.BackgroundColor3 = Color3.fromRGB(60,60,60)
-
-    local BarCorner = Instance.new("UICorner", Bar)
-    BarCorner.CornerRadius = UDim.new(1,0)
-
-    -- FILL
-    Fill.Parent = Bar
-    Fill.BackgroundColor3 = self.Theme.SliderUnderLineColor
-    Fill.Size = UDim2.new(0,0,1,0)
-
-    local FillCorner = Instance.new("UICorner", Fill)
-    FillCorner.CornerRadius = UDim.new(1,0)
-
-    -- CIRCLE
-    Circle.Parent = Bar
-    Circle.Size = UDim2.new(0,12,0,12)
-    Circle.BackgroundColor3 = self.Theme.Sliderball
-    Circle.Position = UDim2.new(0,0,0.5,-6)
-
-    local CircleCorner = Instance.new("UICorner", Circle)
-    CircleCorner.CornerRadius = UDim.new(1,0)
-
-    -- UPDATE
-    local function Update(x)
-        local percent = math.clamp((x - Bar.AbsolutePosition.X) / Bar.AbsoluteSize.X, 0, 1)
-        local val = math.floor(slider.Min + (slider.Max - slider.Min) * percent)
-
-        Value = val
-        ValueText.Text = tostring(val)
-
-        Fill.Size = UDim2.new(percent,0,1,0)
-        Circle.Position = UDim2.new(percent,-6,0.5,-6)
-
-        slider.Callback(val)
-    end
-
-    -- INPUT (PC + MOBILE)
-    Bar.InputBegan:Connect(function(input)
-        if input.UserInputType == Enum.UserInputType.MouseButton1
-        or input.UserInputType == Enum.UserInputType.Touch then
-            dragging = true
-            Update(input.Position.X)
-        end
-    end)
-
-    Bar.InputEnded:Connect(function(input)
-        if input.UserInputType == Enum.UserInputType.MouseButton1
-        or input.UserInputType == Enum.UserInputType.Touch then
-            dragging = false
-        end
-    end)
-
-    game:GetService("UserInputService").InputChanged:Connect(function(input)
-        if dragging and (
-            input.UserInputType == Enum.UserInputType.MouseMovement
-            or input.UserInputType == Enum.UserInputType.Touch
-        ) then
-            Update(input.Position.X)
-        end
-    end)
-
-    task.delay(0.1, function()
-        Update(Bar.AbsolutePosition.X + (Bar.AbsoluteSize.X * (Value / slider.Max)))
-    end)
-
-    return {
-        Set = function(v)
-            Value = math.clamp(v, slider.Min, slider.Max)
-            Update(Bar.AbsolutePosition.X + (Bar.AbsoluteSize.X * (Value / slider.Max)))
-        end
-    }
-end
-
 	function tab:AddDropdown(config)
 		local dropdown = {
 			Name = config.Name,
@@ -2978,7 +2791,6 @@ function Library:Minimaze()
 				self.Search.Visible = false
 				self.TextLabel.Visible = false
 				self.TextLabel_2.Visible = false
-				self.version.Visible = false
 				self.close.Visible = false
 				self.ImageButton.Visible = false
 				self.ImageButton_2.Visible = false
@@ -3067,7 +2879,6 @@ function Library:Minimaze()
 				end
 				self.TextLabel.Visible = true
 				self.TextLabel_2.Visible = true
-				self.version.Visible = true
 				self.close.Visible = true
 				self.ImageButton.Visible = true
 				self.ImageButton_2.Visible = true
@@ -3660,9 +3471,6 @@ local Themes = {
 		dbtntran = 0.95,
 		TabTransparancy = 0.95,
 		dbtncolor = Color3.fromRGB(255, 255, 255),
-		versionBackgroundColor3 = Color3.fromRGB(255, 255, 255),
-		versionBackgroundTransparency = 0,
-		versionTextColor = Color3.fromRGB(0, 0, 0),
 		IOSdraglineColor = Color3.fromRGB(255, 255, 255),
 		TabTextColor = Color3.fromRGB(255, 255, 255),
 		TabColor = Color3.fromRGB(255, 255, 255),
@@ -3933,6 +3741,9 @@ function Library:SetTheme(themeName : string)
 	self.Frame_2.BackgroundColor3 = theme.TextColor
 	self.Frame.BackgroundColor3 = theme.TextColor
 	self.WindowUser.BackgroundColor3 = theme.versionBackgroundColor3
+	self.version.BackgroundColor3 = theme.versionBackgroundColor3
+	self.version.BackgroundTransparency = theme.versionBackgroundTransparency
+	self.versionTextLabel.TextColor3 = theme.versionTextColor
 	self.Search.BackgroundColor3 =  theme.dbtncolor
 	self.Search.BackgroundTransparency =  theme.dbtntran
 	self.SearchTextBox2.TextColor3 = theme.TextColor
